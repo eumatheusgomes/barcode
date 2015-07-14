@@ -5,7 +5,7 @@ require '../vendor/autoload.php';
 use EuMatheusGomes\Barcode\InterleavedTwoOfFive;
 
 if (isset($_POST) && count($_POST) > 0) {
-    $itf = new InterleavedTwoOfFive();
+    $itf = new InterleavedTwoOfFive($_POST['narrow'], $_POST['wide'], $_POST['height']);
     $barcode = $itf->render($_POST['number']);
 }
 
@@ -35,6 +35,24 @@ if (isset($_POST) && count($_POST) > 0) {
               <input type="text" name="number" id="number" class="form-control" value="<?= $value ?>">
             </div>
 
+            <div class="form-group">
+              <label for="narrow">Set the narrow bar width (in px):</label>
+              <?php $value = isset($_POST['narrow']) ? $_POST['narrow'] : '1' ?>
+              <input type="text" name="narrow" id="narrow" class="form-control" value="<?= $value ?>">
+            </div>
+
+            <div class="form-group">
+              <label for="wide">Set the wide bar width (in px):</label>
+              <?php $value = isset($_POST['wide']) ? $_POST['wide'] : '3' ?>
+              <input type="text" name="wide" id="wide" class="form-control" value="<?= $value ?>">
+            </div>
+
+            <div class="form-group">
+              <label for="height">Set the bars height (in px):</label>
+              <?php $value = isset($_POST['height']) ? $_POST['height'] : '50' ?>
+              <input type="text" name="height" id="height" class="form-control" value="<?= $value ?>">
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
@@ -45,7 +63,7 @@ if (isset($_POST) && count($_POST) > 0) {
         <div class="panel-body">
           <h4>Usage:</h4>
 <pre>
-$itf = new InterleavedTwoOfFive();
+$itf = new InterleavedTwoOfFive($_POST['narrow'], $_POST['wide'], $_POST['height']);
 echo $itf->render($_POST['number']);
 </pre>
         </div>
