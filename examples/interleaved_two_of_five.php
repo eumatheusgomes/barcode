@@ -4,8 +4,16 @@ require '../vendor/autoload.php';
 
 use EuMatheusGomes\Barcode\InterleavedTwoOfFive;
 
-if (isset($_POST) && count($_POST) > 0) {
+if (isset($_POST) && count($_POST) == 6) {
     $itf = new InterleavedTwoOfFive($_POST['narrow'], $_POST['wide'], $_POST['height']);
+
+    if ($_POST['bar'] != '' && $_POST['space']) {
+        $itf->setImages([
+            'bar' => $_POST['bar'],
+            'space' => $_POST['space']
+        ]);
+    }
+
     $barcode = $itf->render($_POST['number']);
 }
 
@@ -53,6 +61,18 @@ if (isset($_POST) && count($_POST) > 0) {
               <input type="text" name="height" id="height" class="form-control" value="<?= $value ?>">
             </div>
 
+            <div class="form-group">
+              <label for="bar">Bar image path (leave it blank to use divs):</label>
+              <?php $value = isset($_POST['bar']) ? $_POST['bar'] : 'img/bar.png' ?>
+              <input type="text" name="bar" id="bar" class="form-control" value="<?= $value ?>">
+            </div>
+
+            <div class="form-group">
+              <label for="space">Space image path (leave it blank to use divs):</label>
+              <?php $value = isset($_POST['space']) ? $_POST['space'] : 'img/space.png' ?>
+              <input type="text" name="space" id="space" class="form-control" value="<?= $value ?>">
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         </div>
@@ -64,6 +84,14 @@ if (isset($_POST) && count($_POST) > 0) {
           <h4>Usage:</h4>
 <pre>
 $itf = new InterleavedTwoOfFive($_POST['narrow'], $_POST['wide'], $_POST['height']);
+
+if ($_POST['bar'] != '' && $_POST['space']) {
+    $itf->setImages([
+        'bar' => $_POST['bar'],
+        'space' => $_POST['space']
+    ]);
+}
+
 echo $itf->render($_POST['number']);
 </pre>
         </div>
