@@ -28,6 +28,7 @@ class InterleavedTwoOfFive
         9 => 'nwnwn'
     ];
 
+    private $images = [];
     private $sizes = [];
     private $height;
 
@@ -84,6 +85,11 @@ class InterleavedTwoOfFive
         return $html;
     }
 
+    public function setImages($images)
+    {
+        $this->images = $images;
+    }
+
     private function draw($num1, $num2)
     {
         $drawing = '';
@@ -108,16 +114,15 @@ class InterleavedTwoOfFive
 
     private function html($char)
     {
-        $style = 'style="display:inline-block; width:1px; height:' . $this->height . 'px; background:%s"';
-        $format = '<div '. $style .'></div>';
+        $format = $this->divFormat();
+        $param = $this->divParam($char);
 
-        if ($char == 0) {
-            $background = self::SPACE;
-        } else {
-            $background = self::BAR;
+        if (isset($this->images['bar']) && isset($this->images['space'])) {
+            $format = $this->imgFormat();
+            $param = $this->imgParam($char);
         }
 
-        return sprintf($format, $background);
+        return sprintf($format, $param);
     }
 
     private function encode($char, $barOrSpace)
@@ -129,5 +134,35 @@ class InterleavedTwoOfFive
         }
 
         return $encoding;
+    }
+
+    private function divFormat()
+    {
+        $style = 'style="display:inline-block; width:1px; height:' . $this->height . 'px; background:%s"';
+        return '<div '. $style .'></div>';
+    }
+
+    private function divParam($char)
+    {
+        if ($char == 0) {
+            return self::SPACE;
+        }
+
+        return self::BAR;
+    }
+
+    private function imgFormat()
+    {
+        $style = 'style="display:inline-block; width:1px; height:' . $this->height . 'px"';
+        return '<img src="%s" '. $style .'>';
+    }
+
+    private function imgParam($char)
+    {
+        if ($char == 0) {
+            return $this->images['space'];
+        }
+
+        return $this->images['bar'];
     }
 }
